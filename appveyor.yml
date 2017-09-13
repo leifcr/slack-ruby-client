@@ -1,0 +1,27 @@
+version: 0.9.{build}-{branch}
+
+cache:
+  - vendor/bundle
+
+environment:
+  matrix:
+    - RUBY_VERSION: 24
+    - RUBY_VERSION: 22
+
+install:
+  - set PATH=C:\Ruby%RUBY_VERSION%\bin;%PATH%
+  - bundle config --local path vendor/bundle
+  - bundle install
+
+build: off
+
+before_test:
+  - ruby -v
+  - gem update bundler
+  - gem update --system
+  - gem -v
+  - bundle -v
+
+# Only run spec on Windows. Rubocop will run under *nix on travis
+test_script:
+  - bundle exec rake spec
